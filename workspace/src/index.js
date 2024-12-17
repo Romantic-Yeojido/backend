@@ -3,6 +3,7 @@ import swaggerUiExpress from "swagger-ui-express";
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
+import memory from "./routes/memo.route.js";
 import map from "./routes/map.route.js";
 import userRouter from "./routes/user.router.js"; // 사용자 라우터 추가
 
@@ -11,10 +12,10 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT;
 
-app.use(cors());
-app.use(express.static("public"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(cors());                            // cors 방식 허용
+app.use(express.static('public'));          // 정적 파일 접근
+app.use(express.json());                    // request의 본문을 json으로 해석할 수 있도록 함 (JSON 형태의 요청 body를 파싱하기 위함)
+app.use(express.urlencoded({ extended: false })); // 단순 객체 문자열 형태로 본문 데이터 해석
 
 app.use("/api/v1/users", userRouter);
 
@@ -81,4 +82,5 @@ app.get("/openapi.json", async (req, res) => {
   res.json(result ? result.data : null);
 });
 
+app.use("/api/v1", memory);
 app.use("/api/v1/users", map);
