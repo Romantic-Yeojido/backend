@@ -20,4 +20,22 @@ export class UserService {
 
         return true;
     }
+    async getMyProfile(userId) {
+        // 사용자 존재 여부 확인
+        const user = await this.userRepository.findById(userId);
+        
+        if (!user) {
+            throw new Error('존재하지 않는 사용자입니다');
+        }
+    
+        if (user.is_deleted) {
+            throw new Error('탈퇴한 사용자입니다');
+        }
+    
+        // 필요한 정보만 반환
+        return {
+            email: user.email,
+            nickname: user.nickname
+        };
+    }
 }
