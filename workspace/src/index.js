@@ -3,6 +3,7 @@ import swaggerUiExpress from "swagger-ui-express";
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
+import map from "./routes/map.route.js";
 
 dotenv.config();
 
@@ -54,3 +55,5 @@ app.get("/openapi.json", async (req, res, next) => {
   const result = await swaggerAutogen(options)(outputFile, routes, doc);
   res.json(result ? result.data : null);
 });
+
+app.use("/api/v1/users", map);
