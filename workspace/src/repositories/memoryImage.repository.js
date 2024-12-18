@@ -4,7 +4,13 @@ export const addMemoryImage = async (data) => {
     const conn = await pool.getConnection();
 
     try {
-        console.log('Data to be inserted:', data); // 삽입하려는 데이터 출력
+        const [memory] = await conn.query(`select id from memories where id = ?`, [
+            data.memory_id
+          ]);
+      
+          if (memory.length === 0) {
+            throw new Error("존재하지 않는 추억입니다.");
+          }
 
         const [result] = await pool.query(
             `INSERT INTO memory_images (memory_id, image_url, image_order) VALUES (?, ?, ?);`,

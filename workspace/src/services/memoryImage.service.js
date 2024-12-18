@@ -17,5 +17,9 @@ export const postMemoryImages = async (files, memoryId) => {
   // 모든 이미지가 저장된 후에 memory_images 정보를 조회
   const memoryImages = await getMemoryImages(memoryId);
 
+  if (!memoryImages) {
+    throw new Error("해당 추억 id에 저장된 이미지가 없습니다.");
+  }
+
   return responseFromMemoryImages(memoryImages);
 };
