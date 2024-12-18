@@ -4,8 +4,9 @@ import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import memory from "./routes/memo.route.js";
-import map from "./routes/map.route.js";
+import map from "./routes/userMap.route.js";
 import userRouter from "./routes/user.router.js"; // 사용자 라우터 추가
+import memoryImage from "./routes/memoryImage.route.js";
 
 dotenv.config();
 
@@ -66,7 +67,7 @@ app.get("/openapi.json", async (req, res) => {
       version : '1.0.0'
     },
     host: "localhost:3000",
-    basePath: "/api/v1",
+    basePath: "",
     schemes: ['http'],
     consumes: ['application/json'],
     produces: ['application/json'],
@@ -84,3 +85,4 @@ app.get("/openapi.json", async (req, res) => {
 
 app.use("/api/v1", memory);
 app.use("/api/v1/users", map);
+app.use("/api/v1", memoryImage);
