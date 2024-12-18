@@ -8,5 +8,6 @@ export const responseFromMemories = (body) => {
       visit_date,
       friends: body.friends || "",
       content: body.content || "",
+      summary: body.summary || "",
     }
   }
