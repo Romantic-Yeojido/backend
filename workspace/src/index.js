@@ -6,6 +6,7 @@ import cors from "cors";
 import memory from "./routes/memo.route.js";
 import map from "./routes/userMap.route.js";
 import userRouter from "./routes/user.router.js"; // 사용자 라우터 추가
+import memoryImage from "./routes/memoryImage.route.js";
 import userHomeRouter from './routes/user.home.router.js';
 
 dotenv.config();
@@ -81,3 +82,4 @@ app.get("/openapi.json", async (req, res) => {
 
 app.use("/api/v1", memory);
 app.use("/api/v1/users", map);
+app.use("/api/v1", memoryImage);
