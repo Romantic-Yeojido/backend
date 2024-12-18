@@ -4,12 +4,12 @@ export const getAllUserMemoryLocs = async (userId) => {
   const conn = await pool.getConnection();
 
   try {
-    const [confirm] = await conn.query(`select id from users where id = ?`, [
+    const [user] = await conn.query(`select id from users where id = ?`, [
       userId,
     ]);
 
-    if (confirm.length === 0) {
-      return 0;
+    if (user.length === 0) {
+      throw new Error("존재하지 않는 사용자입니다.");
     }
 
     const [result] = await conn.query(
@@ -19,6 +19,50 @@ export const getAllUserMemoryLocs = async (userId) => {
                 join locations l on m.location_id = l.id
             where u.id = ?;`,
       [userId]
+    );
+
+    return result;
+  } catch (err) {
+    throw err;
+  } finally {
+    conn.release();
+  }
+};
+
+export const getUserLocMemory = async (userId, latitude, longitude) => {
+  const conn = await pool.getConnection();
+
+  try {
+    const [user] = await conn.query(`select id from users where id = ?`, [
+      userId,
+    ]);
+
+    if (user.length === 0) {
+      return null;
+    }
+
+    const [locations] = await conn.query(
+      `select latitude, longitude from locations where latitude = ? and longitude = ?`,
+      [latitude, longitude]
+    );
+
+    if (locations.length === 0) {
+      return null;
+    }
+
+    const [result] = await conn.query(
+      `select m.id, m.title, m.visit_date, m.friends, m.summary, mi.image_url
+        from memories m
+        left join (select memory_id,
+                     min(image_order) min_image_order,
+                    image_url  
+              from memory_images group by memory_id) mi 
+        on m.id = mi.memory_id
+        join locations l on m.location_id = l.id
+        where m.user_id = ?
+        and latitude = ? 
+        and longitude = ?;`,
+      [userId, latitude, longitude]
     );
 
     return result;

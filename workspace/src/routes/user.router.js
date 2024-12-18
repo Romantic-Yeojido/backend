@@ -1,6 +1,6 @@
 // routes/user.router.js
-import express from 'express';
-import { UserController } from '../controllers/user.controller.js';
+import express from "express";
+import { UserController } from "../controllers/user.controller.js";
 
 const router = express.Router();
 const userController = new UserController();
@@ -52,8 +52,10 @@ const userController = new UserController();
  *                   type: string
  *                   example: "존재하지 않는 사용자입니다"
  */
-router.patch('/withdraw/:userId', userController.withdrawUser.bind(userController));
-
+router.patch(
+  "/withdraw/:userId",
+  userController.withdrawUser.bind(userController)
+);
 
 /**
  * @swagger
@@ -104,8 +106,7 @@ router.patch('/withdraw/:userId', userController.withdrawUser.bind(userControlle
  *                   type: string
  *                   example: "존재하지 않는 사용자입니다"
  */
-router.get('/:userId', userController.getMyProfile.bind(userController));
-
+router.get("/:userId", userController.getMyProfile.bind(userController));
 
 /**
  * @swagger
@@ -129,6 +130,6 @@ router.get('/:userId', userController.getMyProfile.bind(userController));
  *                   type: string
  *                   example: "로그아웃이 완료되었습니다"
  */
-router.post('/auth/logout', userController.logout.bind(userController));
+router.post("/auth/logout", userController.logout.bind(userController));
 
 export default router;
