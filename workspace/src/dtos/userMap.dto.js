@@ -4,3 +4,22 @@ export const responseFromUserMeomoryLocs = (locations) => {
     longitude: location.longitude,
   }));
 };
+
+export const responseLocMemory = (memory) => {
+  const memoryData = Array.isArray(memory) ? memory[0] : memory;
+
+  if (!memory) {
+    return null;
+  }
+
+  const response = {
+    id: memoryData.id,
+    title: memoryData.title,
+    visit_date: memoryData.visit_date,
+    friends: memoryData.friends,
+    gpt_summary: memoryData.summary,
+    image_url: memoryData.image_url,
+  };
+
+  return response;
+};
