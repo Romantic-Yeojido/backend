@@ -10,4 +10,4 @@ export const responseFromMemories = (body) => {
       content: body.content || "",
       summary: body.summary || "",
     }
-  }
+}
