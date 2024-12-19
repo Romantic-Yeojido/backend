@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import { responseFromMemories } from "../dtos/memo.dto.js";
-import { postMemories , updateMemory } from "../services/memo.service.js";
+import { postMemories , updateMemory ,deleteMemory } from "../services/memo.service.js";
 
 
 export const handleMemories = async (req, res, next) => {
@@ -69,5 +69,25 @@ export const handleUpdateMemory = async (req, res, next) => {
             success: false,
             message: error.message 
         });
+    }
+};
+export const handleDeleteMemory = async (req, res) => {
+    try {
+        const memoryId = parseInt(req.params.memoryId);
+        const userId = parseInt(req.body.userId);
+        
+        await deleteMemory(memoryId, userId);
+        
+        res.status(StatusCodes.OK).json({ 
+            success: true,
+            message: "추억이 삭제되었습니다."
+        });
+    } catch (error) {
+        console.error('Memory delete error:', error);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR)
+           .json({ 
+               success: false,
+               message: error.message 
+           });
     }
 };
