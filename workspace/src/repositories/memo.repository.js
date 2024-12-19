@@ -121,3 +121,21 @@ export const updateMemoryById = async (memoryId, userId, data) => {
     conn.release();
   }
 };
+export const softDeleteMemory = async (memoryId, userId) => {
+  const conn = await pool.getConnection();
+  try {
+      const [result] = await pool.query(
+          `UPDATE memories 
+           SET is_deleted = true, 
+               updated_at = CURRENT_TIMESTAMP
+           WHERE id = ? AND user_id = ? AND is_deleted = false`,
+          [memoryId, userId]
+      );
+      
+      return result.affectedRows > 0;
+  } catch (err) {
+      throw new Error('추억 삭제 중 오류가 발생했습니다.');
+  } finally {
+      conn.release();
+  }
+};
