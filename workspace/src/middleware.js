@@ -1,8 +1,10 @@
-import { S3Client } from "@aws-sdk/client-s3";  // AWS SDK v3
+import { S3Client } from "@aws-sdk/client-s3"; // AWS SDK v3
 import multer from "multer";
 import multerS3 from "multer-s3";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
+import session from "express-session";
+import passport from "passport";
 
 const s3 = new S3Client({
   region: process.env.AWS_REGION,
@@ -25,7 +27,7 @@ export const imageUploader = multer({
       const uploadDirectory = "memory_images"; // 디렉토리 path 설정을 위해서
       const extension = path.extname(file.originalname); // 파일 이름 얻어오기
       const uuid = uuidv4(); // UUID 생성
-      
+
       // extension 확인을 위한 코드 (확장자 검사용)
       if (!allowedExtensions.includes(extension)) {
         return callback(new Error("Invalid file extension"));
@@ -37,3 +39,31 @@ export const imageUploader = multer({
   // 이미지 용량 제한 (5MB)
   limits: { fileSize: 5 * 1024 * 1024 },
 });
+
+export const configureMiddleware = (app) => {
+  // Session 설정
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET || "your-secret-key",
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 24 * 60 * 60 * 1000,
+      },
+    })
+  );
+
+  // Passport 초기화
+  app.use(passport.initialize());
+  app.use(passport.session());
+
+  // Passport 직렬화/역직렬화
+  passport.serializeUser((user, done) => {
+    done(null, user);
+  });
+
+  passport.deserializeUser((user, done) => {
+    done(null, user);
+  });
+};
