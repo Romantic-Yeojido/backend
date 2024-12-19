@@ -4,20 +4,22 @@ export const addMemoryImage = async (data) => {
     const conn = await pool.getConnection();
 
     try {
-        const [memory] = await conn.query(`select id from memories where id = ?`, [
-            data.memory_id
-          ]);
-      
-          if (memory.length === 0) {
-            throw new Error("존재하지 않는 추억입니다.");
-          }
+        const [existingImages] = await conn.query(
+            `SELECT COUNT(*) as count FROM memory_images WHERE memory_id = ?`,
+            [data.memory_id]
+        );
+
+        // memory_id 별 이미지 개수가 5개 초과 시 오류 발생
+        if (existingImages[0].count >= 5) {
+            throw new Error("이미지는 최대 5개까지만 업로드 가능합니다.");
+        }
 
         const [result] = await pool.query(
             `INSERT INTO memory_images (memory_id, image_url, image_order) VALUES (?, ?, ?);`,
             [
                 data.memory_id,
                 data.image_url,
-                data.image_order,
+                data.image_order
             ]
         );
 

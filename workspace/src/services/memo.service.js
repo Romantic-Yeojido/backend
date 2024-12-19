@@ -20,7 +20,7 @@ const generateSummary = async (content) => {
             messages: [
                 { role: 'user', content: `다음 내용을 아주 짧게 요약해줘: ${content}` },
             ],
-            max_tokens: 100,
+            max_tokens: 200,
         });
 
         return response.choices[0].message.content.trim();
@@ -54,8 +54,7 @@ export const postMemories = async (data) => {
 
         return responseFromMemories(memories);
     } catch (error) {
-        console.error('Error in addMemories service:', error);
-        throw new Error('메모리 추가에 실패했습니다.');
+        throw error;
     }
 };
 

@@ -5,7 +5,21 @@ export const addMemories = async (data) => {
     const conn = await pool.getConnection();
 
   try {
-    console.log('Data to be inserted:', data);  // 삽입하려는 데이터 출력
+    const [user] = await conn.query(`select id from users where id = ?`, [
+      data.user_id
+    ]);
+
+    if (user.length === 0) {
+      throw new Error("존재하지 않는 사용자입니다.");
+    }
+
+    const [location] = await conn.query(`select id from locations where id = ?`, [
+      data.location_id
+    ]);
+
+    if (location.length === 0) {
+      throw new Error("존재하지 않는 위치입니다.");
+    }
 
     const [result] = await pool.query(
       `INSERT INTO memories (user_id, location_id, title, visit_date, friends, content, summary) VALUES (?, ?, ?, ?, ?, ?, ?);`,
