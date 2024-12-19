@@ -1,9 +1,12 @@
 // routes/user.router.js
 import express from "express";
 import { UserController } from "../controllers/user.controller.js";
+import passport from "passport";
+import { naverStrategy } from "../auth.config.js";
 
 const router = express.Router();
 const userController = new UserController();
+passport.use(naverStrategy);
 
 /**
  * @swagger
@@ -131,5 +134,15 @@ router.get("/:userId", userController.getMyProfile.bind(userController));
  *                   example: "로그아웃이 완료되었습니다"
  */
 router.post("/auth/logout", userController.logout.bind(userController));
+
+router.get("/oauth2/login/naver", passport.authenticate("naver"));
+router.get(
+  "/oauth2/callback/naver",
+  passport.authenticate("naver", {
+    failureRedirect: "/api/v1/users/oauth2/login/naver",
+    failureMessage: true,
+  }),
+  (req, res) => res.redirect("/")
+);
 
 export default router;
