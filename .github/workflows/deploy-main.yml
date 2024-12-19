@@ -34,7 +34,7 @@ jobs:
       - name: Copy Workspace
         run: |
           ssh romactic-yeojido 'sudo mkdir -p /opt/app'
-          ssh romactic-yeojido 'sudo chown ubuntu:ubuntu /opt/app'
+          ssh romactic-yeojido 'sudo chown ubuntu:ubuntu /opt/app/'
           scp -r ./[!.]* romactic-yeojido:/opt/app
 
       - name: Install dependencies
