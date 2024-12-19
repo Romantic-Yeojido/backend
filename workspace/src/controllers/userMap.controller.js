@@ -1,4 +1,6 @@
 import { StatusCodes } from "http-status-codes";
+import { bodyToNewPin } from "../dtos/userMap.dto.js";
+import { createNewPin } from "../services/userMap.service.js";
 import {
   listUserMemoryLocs,
   ItemLocMemeory,
@@ -24,7 +26,25 @@ export const handleItemLocMemory = async (req, res, next) => {
     const userId = parseInt(req.params.userId);
     const { latitude, longitude } = req.query;
     const memory = await ItemLocMemeory(userId, latitude, longitude);
-    res.status(StatusCodes.OK).json({ result: memory });
+    res.status(StatusCodes.OK).json({
+      success: true,
+      result: memory,
+    });
+  } catch (error) {
+    res.status(StatusCodes.NOT_FOUND).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const handleAddNewLoc = async (req, res, next) => {
+  try {
+    const pinLoc = await createNewPin(bodyToNewPin(req.body));
+    res.status(StatusCodes.OK).json({
+      success: true,
+      result: pinLoc,
+    });
   } catch (error) {
     res.status(StatusCodes.NOT_FOUND).json({
       success: false,
