@@ -54,8 +54,7 @@ export const postMemories = async (data) => {
 
         return responseFromMemories(memories);
     } catch (error) {
-        console.error('Error in addMemories service:', error);
-        throw new Error('메모리 추가에 실패했습니다.');
+        throw error;
     }
 };
 export const updateMemory = async (memoryId, userId, updateData) => {

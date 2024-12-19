@@ -3,7 +3,7 @@ import { handleMemories , handleUpdateMemory } from "../controllers/memo.control
 
 const router = express.Router();
 
-router.post("/user/memories", handleMemories);
+router.post("/users/:userId/locations/:locationId", handleMemories);
 
 
 router.patch("/user/memories/:memoryId", handleUpdateMemory);

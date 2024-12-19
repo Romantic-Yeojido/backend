@@ -2,13 +2,49 @@ import { StatusCodes } from "http-status-codes";
 import { postMemoryImages } from "../services/memoryImage.service.js";
 
 export const handleMemoryImages = async (req, res, next) => {
-    console.log("Files uploaded:", req.files); // multer로 처리된 이미지 파일들 확인
-    
-    // S3에 업로드된 이미지 URL을 DB에 저장
-    const memoryId = req.body.memory_id; // memoryId는 body에서 가져옴
-    const memories = await postMemoryImages(req.files, memoryId);
 
-    console.log(memories); // DB에 저장된 결과 확인
+    /*
+          #swagger.summary = '이미지 등록하기 API';
+          #swagger.requestBody = {
+            required: true,
+            content: {
+              "multipart/form-data": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    images: {
+                        type: "array",
+                        items: {
+                            type: "string",
+                            format: "binary",
+                            description: "이미지 파일 업로드"
+                        },
+                        description: "최대 5개의 이미지 파일 업로드 가능",
+                        maxItems: 5
+                    }
+                  }
+                }
+              }
+            }
+          };
+      */
 
-    res.status(StatusCodes.OK).json({ result: memories });
+
+    try {
+        console.log("Files uploaded:", req.files); // multer로 처리된 이미지 파일들 확인
+
+        const { memoryId } = req.params;
+
+        // 서비스 함수 호출
+        const memories = await postMemoryImages(req.files, memoryId);
+
+        console.log(memories);
+
+        res.status(StatusCodes.OK).json({ result: memories });
+    } catch (error) {
+        res.status(StatusCodes.BAD_REQUEST).json({
+            success: false,
+            message: error.message,
+        });
+    }
 };
