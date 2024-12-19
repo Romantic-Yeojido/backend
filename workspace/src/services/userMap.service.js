@@ -1,10 +1,13 @@
 import {
   getAllUserMemoryLocs,
   getUserLocMemory,
+  addPin,
+  getPin,
 } from "../repositories/userMap.repository.js";
 import {
   responseFromUserMeomoryLocs,
   responseLocMemory,
+  responseFromNewPin,
 } from "../dtos/userMap.dto.js";
 
 export const listUserMemoryLocs = async (userId) => {
@@ -32,4 +35,23 @@ export const ItemLocMemeory = async (userId, latitude, longitude) => {
     throw new Error("유효하지 않은 값을 입력했습니다.");
   }
   return responseLocMemory(memory);
+};
+
+export const createNewPin = async (data) => {
+  if (!data.latitude || !data.longitude) {
+    throw new Error("위도와 경도 정보가 필요합니다.");
+  }
+
+  const pinId = await addPin({
+    latitude: data.latitude,
+    longitude: data.longitude,
+  });
+
+  const pin = await getPin(pinId);
+
+  if (!pin) {
+    throw new Error("위치 정보 저장에 실패했습니다.");
+  }
+
+  return responseFromNewPin(pin);
 };
