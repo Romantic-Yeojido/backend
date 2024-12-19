@@ -10,5 +10,5 @@ router.post("/user/memories", handleMemories);
 router.patch("/user/memories/:memoryId", handleUpdateMemory);
 
 //삭제
-router.delete("/user/memories/:memoryId", handleDeleteMemory);
+router.patch("/user/memories/delete/:memoryId", handleDeleteMemory);
 export default router;
