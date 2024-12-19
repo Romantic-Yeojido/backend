@@ -1,6 +1,6 @@
 import { responseFromMemories } from "../dtos/memo.dto.js";
 
-import { addMemories, getMemories } from "../repositories/memo.repository.js";
+import { addMemories, getMemories , updateMemoryById, getMemoryByUserIdAndId} from "../repositories/memo.repository.js";
 
 import dotenv from 'dotenv';
 import OpenAI from 'openai';
@@ -20,7 +20,7 @@ const generateSummary = async (content) => {
             messages: [
                 { role: 'user', content: `다음 내용을 아주 짧게 요약해줘: ${content}` },
             ],
-            max_tokens: 100,
+            max_tokens: 200,
         });
 
         return response.choices[0].message.content.trim();
@@ -58,4 +58,26 @@ export const postMemories = async (data) => {
         throw new Error('메모리 추가에 실패했습니다.');
     }
 };
+export const updateMemory = async (memoryId, userId, updateData) => {
+    try {
+        const existingMemory = await getMemoryByUserIdAndId(memoryId, userId);
+        console.log('Service received:', { memoryId, userId, updateData });  // 추가
 
+        // content가 변경되었을 때만 새로운 요약 생성
+        let summary = existingMemory.summary;
+        if (updateData.content) {
+            summary = await generateSummary(updateData.content);
+            updateData.summary = summary;
+        }
+
+        // 데이터 업데이트 수행 
+        await updateMemoryById(memoryId, userId, updateData);
+        
+        // 업데이트된 데이터 조회 및 반환
+        const updatedMemory = await getMemoryByUserIdAndId(memoryId,userId);
+        return responseFromMemories(updatedMemory);
+    } catch (error) {
+        console.error('Error in updateMemory service:', error);
+        throw new Error('메모리 수정에 실패했습니다.');
+    }
+};
