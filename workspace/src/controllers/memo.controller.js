@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import { responseFromMemories } from "../dtos/memo.dto.js";
-import { postMemories } from "../services/memo.service.js";
+import { postMemories , updateMemory } from "../services/memo.service.js";
 
 
 export const handleMemories = async (req, res, next) => {
@@ -47,5 +47,27 @@ export const handleMemories = async (req, res, next) => {
         success: false,
         message: error.message,
       });
+    }
+};
+
+export const handleUpdateMemory = async (req, res, next) => {
+    try {
+        const memoryId = parseInt(req.params.memoryId);
+        const userId = parseInt(req.body.userId);  // 사용자 ID
+        console.log('Controller received:', { memoryId, userId, body: req.body });  // 로그 추가
+        // 수정된 필드만 포함된 데이터 전달
+        const updatedMemory = await updateMemory(memoryId,userId, req.body);
+
+           res.status(StatusCodes.OK).json({ 
+            success: true,
+            result: updatedMemory 
+        });
+    } catch (error) {
+        console.error('Memory update error:', error);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ 
+            success: false,
+            message: error.message 
+        });
     }
 };
