@@ -9,5 +9,6 @@ export const responseFromMemories = (body) => {
       friends: body.friends || "",
       content: body.content || "",
       summary: body.summary || "",
+      updated_at : body.updated_at 
     }
 }
