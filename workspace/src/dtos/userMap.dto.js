@@ -23,3 +23,17 @@ export const responseLocMemory = (memory) => {
 
   return response;
 };
+
+export const bodyToNewPin = (pin) => {
+  return {
+    latitude: parseFloat(pin.latitude),
+    longitude: parseFloat(pin.longitude),
+  };
+};
+
+export const responseFromNewPin = (pin) => {
+  return {
+    latitude: parseFloat(pin.latitude),
+    longitude: parseFloat(pin.longitude),
+  };
+};

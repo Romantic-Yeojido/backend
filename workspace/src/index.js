@@ -7,7 +7,7 @@ import memory from "./routes/memo.route.js";
 import map from "./routes/userMap.route.js";
 import userRouter from "./routes/user.router.js"; // 사용자 라우터 추가
 import memoryImage from "./routes/memoryImage.route.js";
-import userHomeRouter from './routes/user.home.router.js';
+import userHomeRouter from "./routes/user.home.router.js";
 
 dotenv.config();
 
@@ -19,7 +19,7 @@ app.use(express.static("public")); // 정적 파일 접근
 app.use(express.json()); // request의 본문을 json으로 해석할 수 있도록 함 (JSON 형태의 요청 body를 파싱하기 위함)
 app.use(express.urlencoded({ extended: false })); // 단순 객체 문자열 형태로 본문 데이터 해석
 
-app.use("/api/v1/users/home" ,userHomeRouter);
+app.use("/api/v1/users/home", userHomeRouter);
 app.use("/api/v1/users", userRouter);
 
 app.get("/", (req, res) => {

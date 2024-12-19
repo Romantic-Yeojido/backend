@@ -47,7 +47,7 @@ export const getUserLocMemory = async (userId, latitude, longitude) => {
     );
 
     if (locations.length === 0) {
-      return null;
+      return [];
     }
 
     const [result] = await conn.query(
@@ -71,6 +71,55 @@ export const getUserLocMemory = async (userId, latitude, longitude) => {
     throw new Error(
       `오류가 발생했어요. 요청 파라미터를 확인해주세요. (${err})`
     );
+  } finally {
+    conn.release();
+  }
+};
+
+export const addPin = async (pin) => {
+  const conn = await pool.getConnection();
+
+  try {
+    const [user] = await conn.query(`select id from users where id = ?`, [
+      pin.userId,
+    ]);
+
+    if (!user) {
+      throw new Error("존재하지 않는 사용자입니다.");
+    }
+
+    const [result] = await conn.query(
+      `insert into locations (id, latitude, longitude, created_at)
+      values (null, ?, ?, now())`,
+      [pin.latitude, pin.longitude]
+    );
+
+    return result.insertId;
+  } catch {
+    throw err;
+  } finally {
+    conn.release();
+  }
+};
+
+export const getPin = async (pinId) => {
+  const conn = await pool.getConnection();
+
+  try {
+    const [pin] = await pool.query(`select * from locations where id = ?;`, [
+      pinId,
+    ]);
+
+    if (pin.length === 0) return null;
+
+    const [locations] = await pool.query(
+      `select latitude, longitude from locations where id = ?;`,
+      [pin[0].id]
+    );
+
+    return locations[0];
+  } catch (err) {
+    throw err;
   } finally {
     conn.release();
   }
