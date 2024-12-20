@@ -42,4 +42,8 @@ const userHomeController = new UserHomeController();
  */
 router.get('/today-memory/:userId', userHomeController.getTodayMemory.bind(userHomeController));
 
+
+
+router.get('/gift-memory/:userId', userHomeController.getRandomMemory);
+
 export default router;
