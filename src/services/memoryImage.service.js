@@ -38,7 +38,7 @@ export const getMemoryImagesByMemoryId  = async (memoryId) => {
 
     // 이미지 URL 반환
     return memoryImages.map(image => {
-      return responseFromGetMemoryImages(image.memory_id, image.image_url, image.image_order);
+      return responseFromGetMemoryImages(image.id, image.memory_id, image.image_url, image.image_order, image.created_at);
     })
   } catch (error) {
     throw error;

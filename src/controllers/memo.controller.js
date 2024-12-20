@@ -1,5 +1,5 @@
 import { StatusCodes } from "http-status-codes";
-import { responseFromMemories , responseFromGetMemories} from "../dtos/memo.dto.js";
+import { responseFromMemories, responseFromGetMemories } from "../dtos/memo.dto.js";
 import { postMemories, updateMemory, deleteMemory, getMemory } from "../services/memo.service.js";
 
 
@@ -17,13 +17,81 @@ export const handleMemories = async (req, res, next) => {
                 title: { type: "string" },
                 visit_date: { type: "string", format: "date" },
                 friends: { type: "string" },
-                content: { type: "string", example: "남자친구와 100일 기념으로 롯데월드에 갔다. 겨울이라 그런지 날씨가 밤이 되니 너무 추웠다. 오늘 날씨가 꽤 추워서 사람들이 많이 없어서 놀이기구를 4개나 탔다. 굉장히 만족스러웠다. 놀이기구 기다리는 동안 남자친구와 대화를 많이 했다. 그 덕에 우리가 전보다 더 가까워진 것 같은 기분이 들어 좋았다. 앞으로도 200일 300일까지 오늘처럼 잘 지냈으면 좋겠다." }
+                content: { 
+                  type: "string", 
+                  example: "남자친구와 100일 기념으로 롯데월드에 갔다. 겨울이라 그런지 날씨가 밤이 되니 너무 추웠다. 오늘 날씨가 꽤 추워서 사람들이 많이 없어서 놀이기구를 4개나 탔다. 굉장히 만족스러웠다. 놀이기구 기다리는 동안 남자친구와 대화를 많이 했다. 그 덕에 우리가 전보다 더 가까워진 것 같은 기분이 들어 좋았다. 앞으로도 200일 300일까지 오늘처럼 잘 지냈으면 좋겠다."
+                }
               }
             }
           }
         }
       };
-  */
+      #swagger.responses[200] = {
+        description: '추억 등록 성공',
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              properties: {
+                result: {
+                  type: "object",
+                  properties: {
+                    user_id: {
+                      type: "integer",
+                      example: 1
+                    },
+                    location_id: {
+                      type: "integer",
+                      example: 1
+                    },
+                    title: {
+                      type: "string",
+                      example: "String"
+                    },
+                    visit_date: {
+                      type: "string",
+                      format: "date-time",
+                      example: "2024-12-16T15:00:00:000Z"
+                    },
+                    friends: {
+                      type: "string",
+                      example: "String"
+                    },
+                    content: {
+                      type: "string",
+                      example: "String"
+                    },
+                    summary: {
+                      type: "string",
+                      example: "String"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      #swagger.responses[400] = {
+        description: '추억 등록 실패',
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              properties: {
+                success: {
+                  type: "boolean",
+                  example: false
+                },
+                message: {
+                  type: "string"
+                }
+              }
+            }
+          }
+        }
+      }
+*/
 
 
   try {
@@ -93,6 +161,96 @@ export const handleDeleteMemory = async (req, res) => {
 };
 
 export const handleGetMemory = async (req, res) => {
+
+/*
+  #swagger.summary = '나만의 보관함 - 추억 불러오기 API';
+  #swagger.responses[200] = {
+    description: '추억 불러오기 성공',
+    content: {
+      "application/json": {
+        schema: {
+          type: "object",
+          properties: {
+            result: {
+              type: "object",
+              properties: {
+                id: {
+                  type: "integer",
+                  example: 1
+                },
+                user_id: {
+                  type: "integer",
+                  example: 1
+                },
+                location_id: {
+                  type: "integer",
+                  example: 1
+                },
+                title: {
+                  type: "string",
+                  example: "String"
+                },
+                visit_date: {
+                  type: "string",
+                  format: "date-time",
+                  example: "2024-12-16T15:00:00:000Z"
+                },
+                friends: {
+                  type: "string",
+                  example: "String"
+                },
+                content: {
+                  type: "string",
+                  example: "String"
+                },
+                summary: {
+                  type: "string",
+                  example: "String"
+                },
+                is_deleted: {
+                  type: "integer",
+                  example: 0
+                },
+                created_at: {
+                  type: "string",
+                  format: "date-time",
+                  example: "2024-12-16T22:43:56.000Z"
+                },
+                updated_at: {
+                  type: "string",
+                  format: "date-time",
+                  example: "2024-12-19T21:22:06.000Z"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+    #swagger.responses[404] = {
+    description: '추억 불러오기 실패',
+    content: {
+      "application/json": {
+        schema: {
+          type: "object",
+          properties: {
+            success: {
+              type: "boolean",
+              example: false
+            },
+            message: {
+              type: "string"
+            }
+          }
+        }
+      }
+    }
+  }
+*/
+
+
+
   try {
     const userId = parseInt(req.params.userId);
     const locationId = parseInt(req.params.locationId);
