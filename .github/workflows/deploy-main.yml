@@ -45,7 +45,7 @@ jobs:
         run: |
           ssh romantic-yeojido '
             echo "[Unit]
-            Description=UMC 7th Project
+            Description=romantic-yeojido
             After=network.target
 
             [Service]

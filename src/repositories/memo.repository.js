@@ -21,6 +21,15 @@ export const addMemories = async (data) => {
       throw new Error("존재하지 않는 위치입니다.");
     }
 
+    const [existingMemory] = await conn.query(
+      `SELECT id FROM memories WHERE user_id = ? AND location_id = ? AND is_deleted = false`,
+      [data.user_id, data.location_id]
+    );
+
+    if (existingMemory.length > 0) {
+      throw new Error("해당 사용자와 위치에 대한 추억이 이미 존재합니다.");
+    }
+
     const [result] = await pool.query(
       `INSERT INTO memories (user_id, location_id, title, visit_date, friends, content, summary) VALUES (?, ?, ?, ?, ?, ?, ?);`,
       [
@@ -45,7 +54,6 @@ export const addMemories = async (data) => {
 };
 
 
-// Memories 테이블 정보 얻기
 export const getMemories = async (memoryId) => {
   const conn = await pool.getConnection();
 
@@ -53,7 +61,7 @@ export const getMemories = async (memoryId) => {
     const [memory] = await pool.query('SELECT * FROM memories WHERE id = ?', memoryId);
 
     if (memory.length === 0) {
-      throw new Error(`Memory with ID ${memoryId} not found`);
+      throw new Error(` 존재하지 않는 추억 id입니다.`);
     }
 
     return memory[0];
@@ -151,5 +159,43 @@ export const softDeleteMemory = async (memoryId, userId) => {
       throw new Error('추억 삭제 중 오류가 발생했습니다.');
   } finally {
       conn.release();
+  }
+};
+
+// Memories 테이블 정보 얻기
+export const getMemoryById = async (userId, locationId) => {
+  const conn = await pool.getConnection();
+
+  try {
+    const [memory] = await pool.query(
+      'SELECT * FROM memories WHERE user_id = ? AND location_id = ? AND is_deleted = false', [userId, locationId]);
+
+      const [user] = await pool.query(
+        'SELECT * FROM memories WHERE user_id = ? AND is_deleted = false',
+        [userId]
+      );
+      const [location] = await pool.query(
+        'SELECT * FROM memories WHERE location_id = ? AND is_deleted = false',
+        [locationId]
+      );
+    
+      if (user.length === 0 && location.length !== 0) {
+        throw new Error(`존재하지 않는 사용자입니다.`);
+      }
+  
+      if (location.length === 0 && user.length !== 0) {
+        throw new Error(`존재하지 않는 위치입니다.`);
+      }
+
+      if (memory.length === 0) {
+        throw new Error(`존재하지 않는 사용자와 위치입니다.`);
+      }
+
+    return memory[0];
+  } catch (error) {
+    console.error(error.message);
+    throw error;
+  } finally {
+    conn.release();
   }
 };
