@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
-import { responseFromMemories } from "../dtos/memo.dto.js";
-import { postMemories , updateMemory ,deleteMemory } from "../services/memo.service.js";
+import { responseFromMemories , responseFromGetMemories} from "../dtos/memo.dto.js";
+import { postMemories, updateMemory, deleteMemory, getMemory } from "../services/memo.service.js";
 
 
 export const handleMemories = async (req, res, next) => {
@@ -37,57 +37,76 @@ export const handleMemories = async (req, res, next) => {
       user_id: userId,
       location_id: locationId,
     });
-  
+
     const memories = await postMemories(memoriesData);
     console.log(memories);
-  
+
     res.status(StatusCodes.OK).json({ result: memories });
-    } catch (error) {
-      res.status(StatusCodes.NOT_FOUND).json({
-        success: false,
-        message: error.message,
-      });
-    }
+  } catch (error) {
+    res.status(StatusCodes.NOT_FOUND).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
 
 export const handleUpdateMemory = async (req, res, next) => {
-    try {
-        const memoryId = parseInt(req.params.memoryId);
-        const userId = parseInt(req.body.userId);  // 사용자 ID
-        console.log('Controller received:', { memoryId, userId, body: req.body });  // 로그 추가
-        // 수정된 필드만 포함된 데이터 전달
-        const updatedMemory = await updateMemory(memoryId,userId, req.body);
+  try {
+    const memoryId = parseInt(req.params.memoryId);
+    const userId = parseInt(req.body.userId);  // 사용자 ID
+    console.log('Controller received:', { memoryId, userId, body: req.body });  // 로그 추가
+    // 수정된 필드만 포함된 데이터 전달
+    const updatedMemory = await updateMemory(memoryId, userId, req.body);
 
-           res.status(StatusCodes.OK).json({ 
-            success: true,
-            result: updatedMemory 
-        });
-    } catch (error) {
-        console.error('Memory update error:', error);
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ 
-            success: false,
-            message: error.message 
-        });
-    }
+    res.status(StatusCodes.OK).json({
+      success: true,
+      result: updatedMemory
+    });
+  } catch (error) {
+    console.error('Memory update error:', error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({
+        success: false,
+        message: error.message
+      });
+  }
 };
 export const handleDeleteMemory = async (req, res) => {
-    try {
-        const memoryId = parseInt(req.params.memoryId);
-        const userId = parseInt(req.body.userId);
-        
-        await deleteMemory(memoryId, userId);
-        
-        res.status(StatusCodes.OK).json({ 
-            success: true,
-            message: "추억이 삭제되었습니다."
-        });
-    } catch (error) {
-        console.error('Memory delete error:', error);
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR)
-           .json({ 
-               success: false,
-               message: error.message 
-           });
-    }
+  try {
+    const memoryId = parseInt(req.params.memoryId);
+    const userId = parseInt(req.body.userId);
+
+    await deleteMemory(memoryId, userId);
+
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: "추억이 삭제되었습니다."
+    });
+  } catch (error) {
+    console.error('Memory delete error:', error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({
+        success: false,
+        message: error.message
+      });
+  }
+};
+
+export const handleGetMemory = async (req, res) => {
+  try {
+    const userId = parseInt(req.params.userId);
+    const locationId = parseInt(req.params.locationId);
+
+    const memory = await getMemory(userId, locationId);
+    console.log(memory);
+
+    res.status(StatusCodes.OK).json({ result: memory });
+  } catch (error) {
+    console.error('Memory get error:', error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({
+        success: false,
+        message: error.message
+      });
+  }
 };
