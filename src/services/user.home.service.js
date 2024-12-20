@@ -21,4 +21,17 @@ export class UserHomeService {
             title: memory.title
         };
     }
+    async getRandomCompleteMemory (userId) {
+        try {
+            const memory = await this.userHomeRepository.fetchRandomMemory(userId);
+            if (!memory) {
+                return null;
+            }
+            return memory;
+        } catch (error) {
+            throw error;
+        }
+    }
+ 
+    
 }

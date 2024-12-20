@@ -1,6 +1,6 @@
-import { responseFromMemories } from "../dtos/memo.dto.js";
+import { responseFromMemories, responseFromGetMemories } from "../dtos/memo.dto.js";
 
-import { addMemories, getMemories , updateMemoryById, getMemoryByUserIdAndId , softDeleteMemory} from "../repositories/memo.repository.js";
+import { addMemories, getMemories , updateMemoryById, getMemoryByUserIdAndId , softDeleteMemory, getMemoryById } from "../repositories/memo.repository.js";
 
 import dotenv from 'dotenv';
 import OpenAI from 'openai';
@@ -87,6 +87,17 @@ export const deleteMemory = async (memoryId, userId) => {
             throw new Error('삭제할 추억을 찾을 수 없습니다.');
         }
         return true;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const getMemory = async (userId, locationId) => {
+    try {
+
+        const memories = await getMemoryById(userId, locationId);
+
+        return responseFromGetMemories(memories);
     } catch (error) {
         throw error;
     }
