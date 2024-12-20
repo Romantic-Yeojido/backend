@@ -37,13 +37,15 @@ export const getMemoryImages = async (memoryId) => {
     const conn = await pool.getConnection();
 
     try {
-        const [memoryImages] = await pool.query('SELECT * FROM memory_images WHERE memory_id = ?', memoryId);
+        const [memoryImages] = await pool.query(
+            'SELECT * FROM memory_images WHERE memory_id = ?',
+            [memoryId]);
 
         if (memoryImages.length === 0) {
-            throw new Error(`Memory image with ID ${memoryId} not found`);
+            throw new Error(`존재하지 않는 추억입니다.`);
         }
 
-        return memoryImages; // memoryImages 배열 결과 반환
+        return memoryImages;
     } catch (error) {
         console.error(error.message);
         throw error;

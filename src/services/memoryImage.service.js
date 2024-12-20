@@ -1,5 +1,5 @@
 import { addMemoryImage, getMemoryImages } from "../repositories/memoryImage.repository.js";
-import { responseFromMemoryImages } from "../dtos/memoryImage.dto.js";
+import { responseFromMemoryImages, responseFromGetMemoryImages } from "../dtos/memoryImage.dto.js";
 
 export const postMemoryImages = async (files, memoryId) => {
   try {
@@ -24,6 +24,23 @@ export const postMemoryImages = async (files, memoryId) => {
     return memoryImages;
   }
   catch (error) {
+    throw error;
+  }
+};
+
+export const getMemoryImagesByMemoryId  = async (memoryId) => {
+  try {
+    const memoryImages = await getMemoryImages(memoryId)
+
+    if (!memoryImages || memoryImages.length === 0) {
+      throw new Error('해당 추억 ID에 저장된 이미지가 없습니다.');
+    }
+
+    // 이미지 URL 반환
+    return memoryImages.map(image => {
+      return responseFromGetMemoryImages(image.memory_id, image.image_url, image.image_order);
+    })
+  } catch (error) {
     throw error;
   }
 };
