@@ -31,8 +31,8 @@ export const ItemLocMemeory = async (userId, latitude, longitude) => {
 
   const memory = await getUserLocMemory(userId, latitude, longitude);
 
-  if (memory === null) {
-    throw new Error("유효하지 않은 값을 입력했습니다.");
+  if (memory === null || (Array.isArray(memory) && memory.length === 0)) {
+    throw new Error("해당 위치에 저장된 메모리가 없습니다.");
   }
   return responseLocMemory(memory);
 };
@@ -42,9 +42,14 @@ export const createNewPin = async (data) => {
     throw new Error("위도와 경도 정보가 필요합니다.");
   }
 
+  if (!data.userId) {
+    throw new Error("사용자 ID가 필요합니다.");
+  }
+
   const pinId = await addPin({
     latitude: data.latitude,
     longitude: data.longitude,
+    userId: data.userId,
   });
 
   const pin = await getPin(pinId);
