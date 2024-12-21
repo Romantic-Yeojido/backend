@@ -6,11 +6,11 @@ export const responseFromUserMeomoryLocs = (locations) => {
 };
 
 export const responseLocMemory = (memory) => {
-  const memoryData = Array.isArray(memory) ? memory[0] : memory;
-
   if (!memory) {
     return null;
   }
+
+  const memoryData = Array.isArray(memory) ? memory[0] : memory;
 
   const response = {
     id: memoryData.id,
@@ -24,10 +24,11 @@ export const responseLocMemory = (memory) => {
   return response;
 };
 
-export const bodyToNewPin = (pin) => {
+export const bodyToNewPin = (userId, latitude, longitude) => {
   return {
-    latitude: parseFloat(pin.latitude),
-    longitude: parseFloat(pin.longitude),
+    latitude: parseFloat(latitude),
+    longitude: parseFloat(longitude),
+    userId: parseInt(userId),
   };
 };
 

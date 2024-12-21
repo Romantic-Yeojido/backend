@@ -84,7 +84,7 @@ export const addPin = async (pin) => {
       pin.userId,
     ]);
 
-    if (!user) {
+    if (!user || user.length === 0) {
       throw new Error("존재하지 않는 사용자입니다.");
     }
 
@@ -95,7 +95,7 @@ export const addPin = async (pin) => {
     );
 
     return result.insertId;
-  } catch {
+  } catch (err) {
     throw err;
   } finally {
     conn.release();
