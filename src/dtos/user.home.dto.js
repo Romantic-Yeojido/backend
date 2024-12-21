@@ -1,4 +1,3 @@
-// dtos/user.home.dto.js
 export class RandomMemoryResponseDTO {
     constructor(memory) {
         this.title = memory.title;
