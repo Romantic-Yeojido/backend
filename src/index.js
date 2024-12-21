@@ -59,14 +59,19 @@ app.get("/openapi.json", async (req, res) => {
   };
   const outputFile = "/dev/null";
   const routes = ["./src/index.js", "./src/routes/*.router.js"];
+
+ // 요청의 host와 protocol을 동적으로 가져오기
+ const protocol = req.protocol; // http 또는 https
+ const host = req.get("host");
+
   const doc = {
     info: {
       title: "낭만여지도",
       description: "낭만여지도 API request 및 response 테스트",
       version: "1.0.0",
     },
-    host: "localhost:3000",
-    schemes: ["http"],
+    host: `${protocol}://${host}`, // 요청에 따라 동적 설정
+    schemes: [protocol],
     consumes: ["application/json"],
     produces: ["application/json"],
     tags: [
