@@ -58,7 +58,8 @@ app.get("/openapi.json", async (req, res) => {
     writeOutputFile: false,
   };
   const outputFile = "/dev/null";
-  const routes = ["./src/index.js", "./src/routes/*.router.js"];
+  const routes = ["./src/index.js", "./src/routes/*.router.js" , "./src/routes/*.route.js"
+  ];
 
  // 요청의 host와 protocol을 동적으로 가져오기
  const protocol = req.protocol; // http 또는 https
