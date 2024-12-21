@@ -1,5 +1,8 @@
-import express from 'express';
-import { getTodayMemoryController, getRandomMemoryController } from '../controllers/user.home.controller.js';
+import express from "express";
+import {
+  getTodayMemoryController,
+  getRandomMemoryController,
+} from "../controllers/user.home.controller.js";
 
 const router = express.Router();
 
@@ -36,7 +39,7 @@ const router = express.Router();
  *                   type: string
  *                   example: '친구들과 롯데월드 방문'
  */
-router.get('/today-memory/:userId', getTodayMemoryController);
+router.get("/today-memory/:userId", getTodayMemoryController);
 
 /**
  * @swagger
@@ -112,7 +115,6 @@ router.get('/today-memory/:userId', getTodayMemoryController);
  *                   type: string
  *                   example: '서버 에러가 발생했습니다'
  */
-router.get('/gift-memory/:userId', getRandomMemoryController);
-
+router.get("/gift-memory/:userId", getRandomMemoryController);
 
 export default router;

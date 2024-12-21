@@ -20,8 +20,13 @@ router.get(
   passport.authenticate("naver", {
     failureRedirect: "/api/v1/users/oauth2/login/naver",
     failureMessage: true,
+    session: false,
   }),
-  (req, res) => res.redirect("/")
+  (req, res) => {
+    const userId = req.user.id;
+
+    res.json({ userId: userId });
+  }
 );
 
 export default router;

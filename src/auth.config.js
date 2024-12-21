@@ -11,17 +11,24 @@ const naverVerify = async (profile) => {
       throw new Error(`profile.email was not found: ${profile}`);
     }
 
-    // 기존 사용자 조회
     const [users] = await conn.query(
       "SELECT id, email FROM users WHERE email = ?",
       [email]
     );
 
+    if (users.length > 0) {
+      return {
+        id: users[0].id,
+        email: email,
+        name: profile.name,
+      };
+    }
+
     // 새 사용자 생성
     const [result] = await conn.query(
       `INSERT INTO users (id, email, nickname, is_deleted, created_at) 
        VALUES (null, ?, ?, 0, NOW())`,
-      [profile.name, email]
+      [email, profile.name]
     );
 
     // 생성된 사용자 정보 반환
