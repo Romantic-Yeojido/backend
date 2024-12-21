@@ -48,7 +48,7 @@ export const naverStrategy = new NaverStrategy(
   {
     clientID: process.env.PASSPORT_NAVER_CLIENT_ID,
     clientSecret: process.env.PASSPORT_NAVER_CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/api/v1/users/oauth2/callback/naver",
+    callbackURL: "http://3.37.26.60:3000/api/v1/users/oauth2/callback/naver",
     scope: ["name", "email"],
     state: true,
   },
