@@ -113,7 +113,7 @@ export const getPin = async (pinId) => {
     if (pin.length === 0) return null;
 
     const [locations] = await pool.query(
-      `select latitude, longitude from locations where id = ?;`,
+      `select id, latitude, longitude from locations where id = ?;`,
       [pin[0].id]
     );
 

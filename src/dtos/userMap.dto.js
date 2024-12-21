@@ -34,6 +34,7 @@ export const bodyToNewPin = (userId, latitude, longitude) => {
 
 export const responseFromNewPin = (pin) => {
   return {
+    locationId: pin.id,
     latitude: parseFloat(pin.latitude),
     longitude: parseFloat(pin.longitude),
   };
