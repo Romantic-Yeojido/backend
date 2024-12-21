@@ -58,12 +58,15 @@ app.get("/openapi.json", async (req, res) => {
     writeOutputFile: false,
   };
   const outputFile = "/dev/null";
-  const routes = ["./src/index.js", "./src/routes/*.router.js" , "./src/routes/*.route.js"
+  const routes = [
+    "./src/index.js",
+    "./src/routes/*.router.js",
+    "./src/routes/*.route.js",
   ];
 
- // 요청의 host와 protocol을 동적으로 가져오기
- const protocol = req.protocol; // http 또는 https
- const host = req.get("host");
+  // 요청의 host와 protocol을 동적으로 가져오기
+  const protocol = req.protocol; // http 또는 https
+  const host = req.get("host");
 
   const doc = {
     info: {
@@ -92,3 +95,10 @@ app.get("/openapi.json", async (req, res) => {
 app.use("/api/v1", memory);
 app.use("/api/v1/users", map);
 app.use("/api/v1", memoryImage);
+// 리다이렉트될 URL을 처리하는 라우트 추가
+app.get("/userId=:id", (req, res) => {
+  const userId = parseInt(req.params.id);
+  // HTML 응답을 보내거나,
+  // 단순히 userId를 보여주는 페이지를 렌더링
+  res.json({ userId: userId });
+});
