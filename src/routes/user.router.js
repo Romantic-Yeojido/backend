@@ -24,8 +24,7 @@ router.get(
   }),
   (req, res) => {
     const userId = req.user.id;
-    // JSON 응답 대신 URL에 userId를 포함해서 리다이렉트
-    res.redirect(`http://3.37.26.60:3000/userId=${userId}`);
+    res.redirect(`http://3.37.26.60:3000/users/${userId}`);
   }
 );
 

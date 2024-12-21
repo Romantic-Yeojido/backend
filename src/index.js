@@ -95,10 +95,8 @@ app.get("/openapi.json", async (req, res) => {
 app.use("/api/v1", memory);
 app.use("/api/v1/users", map);
 app.use("/api/v1", memoryImage);
-// 리다이렉트될 URL을 처리하는 라우트 추가
-app.get("/userId=:id", (req, res) => {
+
+app.get("/users/:id", (req, res) => {
   const userId = parseInt(req.params.id);
-  // HTML 응답을 보내거나,
-  // 단순히 userId를 보여주는 페이지를 렌더링
   res.json({ userId: userId });
 });
