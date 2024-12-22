@@ -66,7 +66,7 @@ export const handleListUserMemoryLocs = async (req, res, next) => {
             },
             message: {
               type: "string",
-              example: "저장된 장소가 없습니다."
+              example: "존재하지 않는 사용자입니다."
             }
           }
         }
